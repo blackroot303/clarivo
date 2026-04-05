@@ -248,7 +248,16 @@ SVG_ICON_PATHS: dict[str, str] = {
     """,
 }
 
-TOP_LOGO_PATH = "/home/blackroot/pen/assets/logo.png"
+BASE_DIR = Path(__file__).resolve().parent
+ASSETS_DIR = BASE_DIR / "assets"
+
+TOP_LOGO_PATH = str(ASSETS_DIR / "logo.png")
+PEN_CURSOR_PATH = str(ASSETS_DIR / "pen.png")
+HIGHLIGHTER_CURSOR_PATH = str(ASSETS_DIR / "highlighter.png")
+TEXT_CURSOR_PATH = str(ASSETS_DIR / "text.png")
+MOVE_CURSOR_PATH = str(ASSETS_DIR / "move.png")
+ERASER_CURSOR_PATH = str(ASSETS_DIR / "eraser.png")
+SCREENSHOT_CURSOR_PATH = str(ASSETS_DIR / "screenshot.png")
 
 def make_svg_icon(
     icon_name: str,
@@ -1463,42 +1472,42 @@ class OverlayWindow(QWidget):
         self.setGeometry(geometry)
 
         self.pen_cursor = self.build_custom_cursor(
-            "/home/blackroot/pen/assets/pen.png",
+            PEN_CURSOR_PATH,
             hot_x=3,
             hot_y=0,
             size=45,
         )
 
         self.highlighter_cursor = self.build_custom_cursor(
-            "/home/blackroot/pen/assets/highlighter.png",
+            HIGHLIGHTER_CURSOR_PATH,
             hot_x=3,
             hot_y=0,
             size=52,
         )
 
         self.text_cursor = self.build_custom_cursor(
-            "/home/blackroot/pen/assets/text.png",
+            TEXT_CURSOR_PATH,
             hot_x=11,
             hot_y=26,
             size=52,
         )
 
         self.move_cursor = self.build_custom_cursor(
-            "/home/blackroot/pen/assets/move.png",
+            MOVE_CURSOR_PATH,
             hot_x=3,
             hot_y=7,
             size=50,
         )
 
         self.eraser_cursor = self.build_custom_cursor(
-            "/home/blackroot/pen/assets/eraser.png",
+            ERASER_CURSOR_PATH,
             hot_x=3,
             hot_y=0,
             size=50,
         )
 
         self.screenshot_cursor = self.build_custom_cursor(
-            "/home/blackroot/pen/assets/screenshot.png",
+            SCREENSHOT_CURSOR_PATH,
             hot_x=6,
             hot_y=6,
             size=42,
