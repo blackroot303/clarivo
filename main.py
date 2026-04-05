@@ -820,12 +820,16 @@ class ToolbarWindow(QFrame):
         self.overlay = None
 
         self.setWindowTitle("Screen Pen Toolbar")
-        self.setWindowFlags(
+        toolbar_flags = (
             Qt.WindowType.Window
             | Qt.WindowType.FramelessWindowHint
             | Qt.WindowType.WindowStaysOnTopHint
-            | Qt.WindowType.X11BypassWindowManagerHint
         )
+
+        if sys.platform.startswith("linux"):
+            toolbar_flags |= Qt.WindowType.X11BypassWindowManagerHint
+
+        self.setWindowFlags(toolbar_flags)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, False)
         self.setMouseTracking(True)
 
@@ -1456,14 +1460,21 @@ class OverlayWindow(QWidget):
         self.editing_text_index: int | None = None
 
         self.setWindowTitle("Screen Pen Overlay")
-        self.setWindowFlags(
+        overlay_flags = (
             Qt.WindowType.Window
             | Qt.WindowType.FramelessWindowHint
             | Qt.WindowType.WindowStaysOnTopHint
-            | Qt.WindowType.X11BypassWindowManagerHint
         )
+
+        if sys.platform.startswith("linux"):
+            overlay_flags |= Qt.WindowType.X11BypassWindowManagerHint
+
+        self.setWindowFlags(overlay_flags)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
-        self.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground, True)
+        self.setAttribute(
+            Qt.WidgetAttribute.WA_NoSystemBackground,
+            not sys.platform.startswith("win"),
+        )
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setMouseTracking(True)
 
@@ -1586,6 +1597,11 @@ class OverlayWindow(QWidget):
             return
 
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, False)
+
+        if sys.platform.startswith("win"):
+            self.clearMask()
+            return
+
         full_region = QRegion(self.rect())
         toolbar_region = QRegion(self.toolbar_rect_in_overlay())
         self.setMask(full_region.subtracted(toolbar_region))
@@ -2779,6 +2795,11 @@ class OverlayWindow(QWidget):
     def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Source)
+        painter.fillRect(self.rect(), Qt.GlobalColor.transparent)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOver)
+
         if self.visuals_hidden:
             return
 
