@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-
 from __future__ import annotations
+import getpass
 
 import math
 import sys
@@ -28,6 +28,7 @@ from PySide6.QtGui import (
     QFont,
     QGuiApplication,
     QIcon,
+    QImage,
     QKeyEvent,
     QKeySequence,
     QMouseEvent,
@@ -819,7 +820,7 @@ class ToolbarWindow(QFrame):
         self._collapsible_widgets: list[QWidget] = []
         self.overlay = None
 
-        self.setWindowTitle("Screen Pen Toolbar")
+        self.setWindowTitle("clarivo Toolbar")
         toolbar_flags = (
             Qt.WindowType.Window
             | Qt.WindowType.FramelessWindowHint
@@ -838,9 +839,9 @@ class ToolbarWindow(QFrame):
         layout.setSpacing(6)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        self.title_label = QLabel("Screen Pen")
+        self.title_label = QLabel("clarivo")
         self.logo_button = QPushButton()
-        self.logo_button.setToolTip("Screen Pen")
+        self.logo_button.setToolTip("clarivo")
         self.logo_button.setCursor(Qt.CursorShape.OpenHandCursor)
         self.logo_button.setFixedSize(42, 42)
         self.logo_button.setIconSize(QSize(24, 24))
@@ -1459,7 +1460,7 @@ class OverlayWindow(QWidget):
         self.text_editor.live_text_changed.connect(self.live_update_text_edit)
         self.editing_text_index: int | None = None
 
-        self.setWindowTitle("Screen Pen Overlay")
+        self.setWindowTitle("clarivo Overlay")
         overlay_flags = (
             Qt.WindowType.Window
             | Qt.WindowType.FramelessWindowHint
@@ -1486,65 +1487,69 @@ class OverlayWindow(QWidget):
             PEN_CURSOR_PATH,
             hot_x=3,
             hot_y=0,
-            size=45,
+            size=48,
         )
 
         self.highlighter_cursor = self.build_custom_cursor(
             HIGHLIGHTER_CURSOR_PATH,
             hot_x=3,
             hot_y=0,
-            size=52,
+            size=48,
         )
 
         self.text_cursor = self.build_custom_cursor(
             TEXT_CURSOR_PATH,
             hot_x=11,
             hot_y=26,
-            size=52,
+            size=48,
         )
 
         self.move_cursor = self.build_custom_cursor(
             MOVE_CURSOR_PATH,
             hot_x=3,
             hot_y=7,
-            size=50,
+            size=48,
         )
 
         self.eraser_cursor = self.build_custom_cursor(
             ERASER_CURSOR_PATH,
             hot_x=3,
             hot_y=0,
-            size=50,
+            size=48,
         )
 
         self.screenshot_cursor = self.build_custom_cursor(
             SCREENSHOT_CURSOR_PATH,
             hot_x=6,
             hot_y=6,
-            size=42,
+            size=48,
         )
 
     def emit_state_changed(self) -> None:
         self.state_changed.emit()
 
-    def build_custom_cursor(
-        self,
-        image_path: str,
-        hot_x: int = 0,
-        hot_y: int = 0,
-        size: int = 45,
-    ) -> QCursor:
-        pixmap = QPixmap(image_path)
-        if pixmap.isNull():
+    def build_custom_cursor(self, image_path: str, hot_x=0, hot_y=0, size=45) -> QCursor:
+        path = str(Path(image_path).resolve())
+
+        if not Path(path).exists():
             return QCursor(Qt.CursorShape.CrossCursor)
 
-        scaled = pixmap.scaled(
-            size,
-            size,
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
-        )
-        return QCursor(scaled, hot_x, hot_y)
+        image = QImage(path)
+        if image.isNull():
+            return QCursor(Qt.CursorShape.CrossCursor)
+
+        image = image.convertToFormat(QImage.Format.Format_ARGB32_Premultiplied)
+
+        if image.width() != size or image.height() != size:
+            image = image.scaled(
+                size,
+                size,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+
+        pixmap = QPixmap.fromImage(image)
+        return QCursor(pixmap, hot_x, hot_y)
 
     def clone_item(self, item: CanvasItem) -> CanvasItem:
         if isinstance(item, Stroke):
@@ -2872,7 +2877,7 @@ class OverlayWindow(QWidget):
 class ScreenPenApp:
     def __init__(self, app: QApplication) -> None:
         self.app = app
-        self.settings = QSettings("BlackRoot", "ScreenPen")
+        self.settings = QSettings(getpass.getuser(), "clarivo")
 
         self.toolbar = ToolbarWindow()
         self.overlay = OverlayWindow(self.toolbar)
@@ -3291,11 +3296,11 @@ class ScreenPenApp:
         if not pictures_dir:
             pictures_dir = str(Path.home() / "Pictures")
 
-        target_dir = Path(pictures_dir) / "ScreenPen"
+        target_dir = Path(pictures_dir) / "clarivo"
         target_dir.mkdir(parents=True, exist_ok=True)
 
         timestamp = QDateTime.currentDateTime().toString("yyyyMMdd-hhmmss")
-        file_path = target_dir / f"screenshot-{timestamp}.png"
+        file_path = target_dir / f"clarivo-{timestamp}.png"
         self.pending_screenshot_pixmap.save(str(file_path), "PNG")
 
         self.clear_screenshot_state()
