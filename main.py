@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import getpass
 from __future__ import annotations
 
 import math
@@ -819,7 +819,7 @@ class ToolbarWindow(QFrame):
         self._collapsible_widgets: list[QWidget] = []
         self.overlay = None
 
-        self.setWindowTitle("Screen Pen Toolbar")
+        self.setWindowTitle("clarivo Toolbar")
         toolbar_flags = (
             Qt.WindowType.Window
             | Qt.WindowType.FramelessWindowHint
@@ -838,9 +838,9 @@ class ToolbarWindow(QFrame):
         layout.setSpacing(6)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        self.title_label = QLabel("Screen Pen")
+        self.title_label = QLabel("clarivo")
         self.logo_button = QPushButton()
-        self.logo_button.setToolTip("Screen Pen")
+        self.logo_button.setToolTip("clarivo")
         self.logo_button.setCursor(Qt.CursorShape.OpenHandCursor)
         self.logo_button.setFixedSize(42, 42)
         self.logo_button.setIconSize(QSize(24, 24))
@@ -1459,7 +1459,7 @@ class OverlayWindow(QWidget):
         self.text_editor.live_text_changed.connect(self.live_update_text_edit)
         self.editing_text_index: int | None = None
 
-        self.setWindowTitle("Screen Pen Overlay")
+        self.setWindowTitle("clarivo Overlay")
         overlay_flags = (
             Qt.WindowType.Window
             | Qt.WindowType.FramelessWindowHint
@@ -1584,7 +1584,13 @@ class OverlayWindow(QWidget):
     
     def apply_input_transparency(self) -> None:
         transparent = self.mode == "mouse"
-        self.setWindowFlag(Qt.WindowType.WindowTransparentForInput, transparent)
+
+        if sys.platform.startswith("win"):
+            self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, transparent)
+            self.setWindowFlag(Qt.WindowType.WindowTransparentForInput, transparent)
+        else:
+            self.setWindowFlag(Qt.WindowType.WindowTransparentForInput, transparent)
+
         self.show()
         self.raise_()
 
@@ -1593,18 +1599,21 @@ class OverlayWindow(QWidget):
 
         if self.mode == "mouse":
             self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+            self.setWindowFlag(Qt.WindowType.WindowTransparentForInput, True)
             self.clearMask()
+            self.show()
+            self.raise_()
             return
 
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, False)
-
-        if sys.platform.startswith("win"):
-            self.clearMask()
-            return
+        self.setWindowFlag(Qt.WindowType.WindowTransparentForInput, False)
 
         full_region = QRegion(self.rect())
         toolbar_region = QRegion(self.toolbar_rect_in_overlay())
         self.setMask(full_region.subtracted(toolbar_region))
+
+        self.show()
+        self.raise_()
 
 
     def set_mode(self, mode: str) -> None:
@@ -2293,6 +2302,7 @@ class OverlayWindow(QWidget):
             return
 
         super().mouseDoubleClickEvent(event)
+        
     def mousePressEvent(self, event: QMouseEvent) -> None:
         if self.mode == "screenshot":
             if event.button() != Qt.MouseButton.LeftButton:
@@ -2796,9 +2806,13 @@ class OverlayWindow(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
 
-        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Source)
-        painter.fillRect(self.rect(), Qt.GlobalColor.transparent)
-        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOver)
+        if sys.platform.startswith("win"):
+            painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Source)
+            painter.fillRect(self.rect(), Qt.GlobalColor.transparent)
+            painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOver)
+
+            if self.mode != "mouse" and self.board_mode == "off":
+                painter.fillRect(self.rect(), QColor(0, 0, 0, 1))
 
         if self.visuals_hidden:
             return
@@ -2809,7 +2823,6 @@ class OverlayWindow(QWidget):
 
         if self.mode == "screenshot" and self.screenshot_start is not None and self.screenshot_end is not None:
             rect = QRectF(self.screenshot_start, self.screenshot_end).normalized()
-            board_color = self.current_board_color()
 
             painter.fillRect(self.rect(), QColor(0, 0, 0, 90))
 
@@ -2856,11 +2869,10 @@ class OverlayWindow(QWidget):
                 ),
             )
 
-
 class ScreenPenApp:
     def __init__(self, app: QApplication) -> None:
         self.app = app
-        self.settings = QSettings("BlackRoot", "ScreenPen")
+        self.settings = QSettings(getpass.getuser(), "clarivo")
 
         self.toolbar = ToolbarWindow()
         self.overlay = OverlayWindow(self.toolbar)
@@ -3279,11 +3291,11 @@ class ScreenPenApp:
         if not pictures_dir:
             pictures_dir = str(Path.home() / "Pictures")
 
-        target_dir = Path(pictures_dir) / "ScreenPen"
+        target_dir = Path(pictures_dir) / "clarivo"
         target_dir.mkdir(parents=True, exist_ok=True)
 
         timestamp = QDateTime.currentDateTime().toString("yyyyMMdd-hhmmss")
-        file_path = target_dir / f"screenshot-{timestamp}.png"
+        file_path = target_dir / f"clarivo-{timestamp}.png"
         self.pending_screenshot_pixmap.save(str(file_path), "PNG")
 
         self.clear_screenshot_state()
