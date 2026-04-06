@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import getpass
+
 from __future__ import annotations
 
 import math
@@ -819,7 +819,7 @@ class ToolbarWindow(QFrame):
         self._collapsible_widgets: list[QWidget] = []
         self.overlay = None
 
-        self.setWindowTitle("clarivo Toolbar")
+        self.setWindowTitle("Screen Pen Toolbar")
         toolbar_flags = (
             Qt.WindowType.Window
             | Qt.WindowType.FramelessWindowHint
@@ -838,9 +838,9 @@ class ToolbarWindow(QFrame):
         layout.setSpacing(6)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        self.title_label = QLabel("clarivo")
+        self.title_label = QLabel("Screen Pen")
         self.logo_button = QPushButton()
-        self.logo_button.setToolTip("clarivo")
+        self.logo_button.setToolTip("Screen Pen")
         self.logo_button.setCursor(Qt.CursorShape.OpenHandCursor)
         self.logo_button.setFixedSize(42, 42)
         self.logo_button.setIconSize(QSize(24, 24))
@@ -1459,7 +1459,7 @@ class OverlayWindow(QWidget):
         self.text_editor.live_text_changed.connect(self.live_update_text_edit)
         self.editing_text_index: int | None = None
 
-        self.setWindowTitle("clarivo Overlay")
+        self.setWindowTitle("Screen Pen Overlay")
         overlay_flags = (
             Qt.WindowType.Window
             | Qt.WindowType.FramelessWindowHint
@@ -2872,7 +2872,7 @@ class OverlayWindow(QWidget):
 class ScreenPenApp:
     def __init__(self, app: QApplication) -> None:
         self.app = app
-        self.settings = QSettings(getpass.getuser(), "clarivo")
+        self.settings = QSettings("BlackRoot", "ScreenPen")
 
         self.toolbar = ToolbarWindow()
         self.overlay = OverlayWindow(self.toolbar)
@@ -3291,11 +3291,11 @@ class ScreenPenApp:
         if not pictures_dir:
             pictures_dir = str(Path.home() / "Pictures")
 
-        target_dir = Path(pictures_dir) / "clarivo"
+        target_dir = Path(pictures_dir) / "ScreenPen"
         target_dir.mkdir(parents=True, exist_ok=True)
 
         timestamp = QDateTime.currentDateTime().toString("yyyyMMdd-hhmmss")
-        file_path = target_dir / f"clarivo-{timestamp}.png"
+        file_path = target_dir / f"screenshot-{timestamp}.png"
         self.pending_screenshot_pixmap.save(str(file_path), "PNG")
 
         self.clear_screenshot_state()
