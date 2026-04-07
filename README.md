@@ -133,10 +133,11 @@ If you like this project:
 🛠️ Contribute
 ---
 💖 Support the Project
-
-If you find Clarivo useful and want to support its development:
 ==========
 ---
+
+If you find Clarivo useful and want to support its development:
+
 ₿ Bitcoin
 ```bash
 15rzFWoDMpLLQfvzhw68ikaTMHuNoBBsP3
