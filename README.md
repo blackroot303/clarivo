@@ -115,14 +115,14 @@ Clarivo focuses on:
 🧼 Clean UI
 🧑‍🏫 Teaching-friendly workflow
 
-
+============
 👤 Developer
 
 BlackRoot - Katiba
 
 🔗 GitHub:
 https://github.com/blackroot303
-
+===========
 ⭐ Support
 
 If you like this project:
@@ -131,11 +131,11 @@ If you like this project:
 🍴 Fork it
 🛠️ Contribute
 
-
+==========
 💖 Support the Project
 
 If you find Clarivo useful and want to support its development:
-
+==========
 ₿ Bitcoin
 ```bash
 15rzFWoDMpLLQfvzhw68ikaTMHuNoBBsP3
