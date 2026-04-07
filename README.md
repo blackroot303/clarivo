@@ -107,10 +107,10 @@ python3 main.py
 
 ## 📸 Screenshots
 <p align="center">
-  <img src="assets/screenshot1.png" height="400"/>
-  <img src="assets/screenshot2.png" height="400"/>
-  <img src="assets/screenshot3.png" height="400"/>
-  <img src="assets/screenshot4.png" height="400"/>
+  <img src="assets/screenshot1.png" height="500"/>
+  <img src="assets/screenshot2.png" height="500"/>
+  <img src="assets/screenshot3.png" height="500"/>
+  <img src="assets/screenshot4.png" height="500"/>
 </p>
 
 
