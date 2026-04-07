@@ -63,12 +63,11 @@ It allows you to draw, highlight, write, and interact with your screen in a clea
 
 ### 🔹 Easy Setup
 
-1. Go to:
-👉 https://github.com/blackroot303/clarivo/releases
+1. Go to:  
+   https://github.com/blackroot303/clarivo/releases
 
-2. Download:
-clarivo-setup-v1.0.1.exe
-
+2. Download:  
+   `clarivo-setup-v1.0.1.exe`
 
 3. Run the installer
 
@@ -81,16 +80,16 @@ clarivo-setup-v1.0.1.exe
 ### 🔹 Requirements
 
 - Python 3.10+
-- PySide6
+- pip
+- virtual environment support
 
 ### 🔹 Steps
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install PySide6
+pip install -r requirements.txt
 python3 main.py
-
 ```
 
 🛠️ Development
@@ -100,59 +99,41 @@ git clone https://github.com/blackroot303/clarivo.git
 cd clarivo
 python3 -m venv .venv
 source .venv/bin/activate
-pip install PySide6
+pip install -r requirements.txt
 python3 main.py
-
 ```
 
-## 📸 Screenshots
-<p align="center">
-  <img src="assets/screenshot1.png" height="500"/>
-  <img src="assets/screenshot2.png" height="500"/>
-  <img src="assets/screenshot3.png" height="500"/>
-  <img src="assets/screenshot4.png" height="500"/>
-</p>
-
-
+📸 Screenshots
+<p align="center"> <img src="assets/screenshot1.png" height="500"/> <img src="assets/screenshot2.png" height="500"/> <img src="assets/screenshot3.png" height="500"/> <img src="assets/screenshot4.png" height="500"/> </p>
 
 🧠 Why Clarivo?
 
 Clarivo focuses on:
-```bash
-1.⚡ Speed
-2.🎯 Simplicity
-3.🧼 Clean UI
-4.🧑‍🏫 Teaching-friendly workflow
-```
 
+⚡ Speed
+🎯 Simplicity
+🧼 Clean UI
+🧑‍🏫 Teaching-friendly workflow
 
 
 👤 Developer
-```bash
+
 BlackRoot - Katiba
-```
+
 🔗 GitHub:
 https://github.com/blackroot303
 
 
+👤 Developer
 
+BlackRoot - Katiba
 
-⭐ Support
-
-If you like this project:
-```bash
-1.⭐ Star the repository
-2.🍴 Fork it
-3.🛠️ Contribute
-```
-
-
+🔗 GitHub:
+https://github.com/blackroot303
 
 💖 Support the Project
-```bash
-If you find Clarivo useful and want to support its development:
-```
 
+If you find Clarivo useful and want to support its development:
 
 ₿ Bitcoin
 ```bash
@@ -160,5 +141,3 @@ If you find Clarivo useful and want to support its development:
 ```
 Every contribution helps improve the project 🚀
 Thank you for your support ❤️
-
-
