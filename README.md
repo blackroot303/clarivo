@@ -106,6 +106,7 @@ python3 main.py
 📸 Screenshots
 <p align="center"> <img src="assets/screenshot1.png" height="500"/> <img src="assets/screenshot2.png" height="500"/> <img src="assets/screenshot3.png" height="500"/> <img src="assets/screenshot4.png" height="500"/> </p>
 
+---
 🧠 Why Clarivo?
 
 Clarivo focuses on:
@@ -115,14 +116,14 @@ Clarivo focuses on:
 🧼 Clean UI
 🧑‍🏫 Teaching-friendly workflow
 
-============
+---
 👤 Developer
 
 BlackRoot - Katiba
 
 🔗 GitHub:
 https://github.com/blackroot303
-===========
+---
 ⭐ Support
 
 If you like this project:
@@ -130,12 +131,12 @@ If you like this project:
 ⭐ Star the repository
 🍴 Fork it
 🛠️ Contribute
-
-==========
+---
 💖 Support the Project
 
 If you find Clarivo useful and want to support its development:
 ==========
+---
 ₿ Bitcoin
 ```bash
 15rzFWoDMpLLQfvzhw68ikaTMHuNoBBsP3
