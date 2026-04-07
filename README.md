@@ -1,23 +1,139 @@
-# Clarivo
+# 🎯 Clarivo
 
-Clarivo is a modern screen annotation tool built for lessons, tutorials, explanations, and presentations.
+<p align="center">
+  <img src="assets/logo.png" width="120"/>
+</p>
 
-## Features
+<p align="center">
+  <b>A modern screen annotation tool for teaching, presentations, and live explanations</b>
+</p>
 
-- Pen
-- Highlighter
-- Text
-- Shapes
-- Eraser
-- Move and resize
-- Screenshot capture
-- Board mode
-- Undo and redo
+<p align="center">
+  <img src="https://img.shields.io/badge/platform-Windows-blue"/>
+  <img src="https://img.shields.io/badge/platform-Linux-green"/>
+  <img src="https://img.shields.io/badge/Python-3.10+-yellow"/>
+  <img src="https://img.shields.io/badge/version-1.0.1-orange"/>
+</p>
 
-## Run on Linux
+---
+
+## ✨ Overview
+
+Clarivo is a lightweight and powerful screen annotation tool.
+
+It allows you to draw, highlight, write, and interact with your screen in a clean and distraction-free way — perfect for:
+
+- 🧑‍🏫 Teaching
+- 🎥 Tutorials
+- 🖥️ Presentations
+- 🧠 Explanations
+
+---
+
+## 🎥 Preview
+
+<p align="center">
+  <img src="assets/explain.gif" width="700"/>
+</p>
+
+---
+
+## 🔥 Features
+
+- 🖊️ Pen tool (smooth drawing)
+- 🟨 Highlighter tool
+- 🔤 Text tool
+- 🔺 Shapes:
+  - Line
+  - Rectangle
+  - Circle
+  - Triangle
+  - Arrow
+- 🧽 Eraser
+- 🖱️ Move & resize elements
+- 📸 Screenshot tool (auto-save)
+- 🧾 Whiteboard & blackboard modes
+- 🎯 Custom cursors
+- 🧠 Smart popup positioning (adaptive UI)
+- ↩️ Undo / Redo
+
+---
+
+## 📦 Installation (Windows)
+
+### 🔹 Easy Setup
+
+1. Go to:
+👉 https://github.com/blackroot303/clarivo/releases
+
+2. Download:
+clarivo-setup-v1.0.1.exe
+
+
+3. Run the installer
+
+4. Launch Clarivo 🚀
+
+---
+
+## 🐧 Run on Linux
+
+### 🔹 Requirements
+
+- Python 3.10+
+- PySide6
+
+### 🔹 Steps
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install PySide6
 python3 main.py
+
+🛠️ Development
+git clone https://github.com/blackroot303/clarivo.git
+cd clarivo
+python3 -m venv .venv
+source .venv/bin/activate
+pip install PySide6
+python3 main.py
+
+📸 Screenshots
+<p align="center"> <img src="assets/screenshot1.png" width="400"/> <img src="assets/screenshot4.png" width="400"/> </p>
+
+🧠 Why Clarivo?
+
+Clarivo focuses on:
+
+1.⚡ Speed
+2.🎯 Simplicity
+3.🧼 Clean UI
+4.🧑‍🏫 Teaching-friendly workflow
+
+👤 Developer
+
+BlackRoot - Katiba
+
+🔗 GitHub:
+https://github.com/blackroot303
+
+⭐ Support
+
+If you like this project:
+
+1.⭐ Star the repository
+2.🍴 Fork it
+3.🛠️ Contribute
+
+💖 Support the Project
+
+If you find Clarivo useful and want to support its development:
+
+₿ Bitcoin
+15rzFWoDMpLLQfvzhw68ikaTMHuNoBBsP3
+
+Every contribution helps improve the project 🚀
+Thank you for your support ❤️
+
+
