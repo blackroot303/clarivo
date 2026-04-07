@@ -91,7 +91,7 @@ source .venv/bin/activate
 pip install PySide6
 python3 main.py
 
----
+```
 
 🛠️ Development
 
@@ -103,7 +103,7 @@ source .venv/bin/activate
 pip install PySide6
 python3 main.py
 
----
+```
 
 ## 📸 Screenshots
 <p align="center"> <img src="assets/screenshot1.png" width="400"/> <img src="assets/screenshot4.png" width="400"/> </p>
@@ -137,7 +137,9 @@ If you like this project:
 If you find Clarivo useful and want to support its development:
 
 ₿ Bitcoin
+```bash
 15rzFWoDMpLLQfvzhw68ikaTMHuNoBBsP3
+```
 
 Every contribution helps improve the project 🚀
 Thank you for your support ❤️
