@@ -134,8 +134,6 @@ If you like this project:
 ---
 💖 Support the Project
 ==========
----
-
 If you find Clarivo useful and want to support its development:
 
 ₿ Bitcoin
