@@ -123,13 +123,14 @@ BlackRoot - Katiba
 🔗 GitHub:
 https://github.com/blackroot303
 
+⭐ Support
 
-👤 Developer
+If you like this project:
 
-BlackRoot - Katiba
+⭐ Star the repository
+🍴 Fork it
+🛠️ Contribute
 
-🔗 GitHub:
-https://github.com/blackroot303
 
 💖 Support the Project
 
