@@ -108,6 +108,8 @@ python3 main.py
 ## 📸 Screenshots
 <p align="center">
   <img src="assets/screenshot1.png" height="300"/>
+  <img src="assets/screenshot2.png" height="300"/>
+  <img src="assets/screenshot3.png" height="300"/>
   <img src="assets/screenshot4.png" height="300"/>
 </p>
 
@@ -116,19 +118,19 @@ python3 main.py
 🧠 Why Clarivo?
 
 Clarivo focuses on:
-
+```bash
 1.⚡ Speed
 2.🎯 Simplicity
 3.🧼 Clean UI
 4.🧑‍🏫 Teaching-friendly workflow
-
+```
 
 
 
 👤 Developer
-
+```bash
 BlackRoot - Katiba
-
+```
 🔗 GitHub:
 https://github.com/blackroot303
 
@@ -138,18 +140,18 @@ https://github.com/blackroot303
 ⭐ Support
 
 If you like this project:
-
+```bash
 1.⭐ Star the repository
 2.🍴 Fork it
 3.🛠️ Contribute
-
+```
 
 
 
 💖 Support the Project
-
+```bash
 If you find Clarivo useful and want to support its development:
-
+```
 
 
 ₿ Bitcoin
