@@ -33,7 +33,7 @@ It allows you to draw, highlight, write, and interact with your screen in a clea
 ## 🎥 Preview
 
 <p align="center">
-  <img src="assets/explain.gif" width="700"/>
+  <img src="assets/clarivo.gif" width="700"/>
 </p>
 
 ---
@@ -90,7 +90,8 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install PySide6
 python3 main.py
-...
+
+---
 
 🛠️ Development
 
@@ -101,7 +102,8 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install PySide6
 python3 main.py
-...
+
+---
 
 ## 📸 Screenshots
 <p align="center"> <img src="assets/screenshot1.png" width="400"/> <img src="assets/screenshot4.png" width="400"/> </p>
