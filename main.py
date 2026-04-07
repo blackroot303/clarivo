@@ -256,7 +256,7 @@ ERASER_CURSOR_PATH = str(ASSETS_DIR / "eraser.png")
 SCREENSHOT_CURSOR_PATH = str(ASSETS_DIR / "screenshot.png")
 
 APP_NAME = "clarivo"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 APP_DEVELOPER = "BlackRoot - Katiba"
 APP_GITHUB_URL = "https://github.com/blackroot303/clarivo"
 
