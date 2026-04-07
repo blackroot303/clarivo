@@ -8,19 +8,19 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Union
 from PySide6.QtWidgets import (
+    QGridLayout,
+    QVBoxLayout,
     QApplication,
     QFrame,
-    QGridLayout,
     QHBoxLayout,
     QLabel,
     QPushButton,
     QSizePolicy,
     QSlider,
     QTextEdit,
-    QVBoxLayout,
     QWidget,
 )
-from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, Qt, QSettings, Signal, QByteArray, QSize, QDateTime, QStandardPaths, QTimer, QObject
+from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, Qt, QSettings, Signal, QByteArray, QSize, QDateTime, QStandardPaths, QTimer, QObject, QUrl
 from PySide6.QtGui import (
     QColor,
     QClipboard,
@@ -30,6 +30,7 @@ from PySide6.QtGui import (
     QIcon,
     QImage,
     QKeyEvent,
+    QDesktopServices,
     QKeySequence,
     QMouseEvent,
     QPainter,
@@ -41,17 +42,6 @@ from PySide6.QtGui import (
     QRegion,
     QShortcut,
     QTransform,
-)
-from PySide6.QtWidgets import (
-    QApplication,
-    QFrame,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QSizePolicy,
-    QSlider,
-    QTextEdit,
-    QWidget,
 )
 from PySide6.QtSvg import QSvgRenderer
 
@@ -242,6 +232,11 @@ SVG_ICON_PATHS: dict[str, str] = {
     <circle cx="12" cy="12" r="3" />
     <path d="M9 7l1 -2h4l1 2" />
     """,
+    "about": """
+    <circle cx="12" cy="12" r="7" />
+    <path d="M12 10v5" />
+    <circle cx="12" cy="7.5" r="0.8" fill="white" stroke="none" />
+    """,
     "quit": """
         <path d="M9 7v-2h8v14h-8v-2" />
         <path d="M14 12h-9" />
@@ -259,6 +254,11 @@ TEXT_CURSOR_PATH = str(ASSETS_DIR / "text.png")
 MOVE_CURSOR_PATH = str(ASSETS_DIR / "move.png")
 ERASER_CURSOR_PATH = str(ASSETS_DIR / "eraser.png")
 SCREENSHOT_CURSOR_PATH = str(ASSETS_DIR / "screenshot.png")
+
+APP_NAME = "clarivo"
+APP_VERSION = "1.0.0"
+APP_DEVELOPER = "BlackRoot - Katiba"
+APP_GITHUB_URL = "https://github.com/blackroot303/clarivo"
 
 def make_svg_icon(
     icon_name: str,
@@ -807,6 +807,72 @@ class ToolPalette(QFrame):
         self.tool_selected.emit(mode)
         self.hide()
 
+class AboutPalette(QFrame):
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.setWindowFlags(
+            Qt.WindowType.Popup
+            | Qt.WindowType.FramelessWindowHint
+            | Qt.WindowType.WindowStaysOnTopHint
+        )
+
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(10, 10, 10, 10)
+        layout.setSpacing(8)
+        self.setFixedWidth(220)
+
+        self.title_label = QLabel(APP_NAME)
+        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.version_label = QLabel(f"Version {APP_VERSION}")
+        self.version_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.developer_label = QLabel(f"Developed by {APP_DEVELOPER}")
+        self.developer_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.developer_label.setWordWrap(True)
+
+        self.github_button = QPushButton("GitHub")
+        self.github_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.github_button.clicked.connect(self.open_github)
+
+        layout.addWidget(self.title_label)
+        layout.addWidget(self.version_label)
+        layout.addWidget(self.developer_label)
+        layout.addWidget(self.github_button)
+
+        self.setStyleSheet(
+            """
+            QFrame {
+                background: rgb(35, 35, 35);
+                border: 1px solid rgb(85, 85, 85);
+                border-radius: 10px;
+            }
+            QLabel {
+                color: white;
+                font-size: 13px;
+                font-weight: 600;
+                border: none;
+                background: transparent;
+                padding: 2px 4px;
+            }
+            QPushButton {
+                color: white;
+                background: rgb(55, 55, 55);
+                border: 1px solid rgb(95, 95, 95);
+                border-radius: 8px;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            QPushButton:hover {
+                background: rgb(75, 75, 75);
+            }
+            """
+        )
+
+    def open_github(self) -> None:
+        QDesktopServices.openUrl(QUrl(APP_GITHUB_URL))
+        self.hide()
+
 class ToolbarWindow(QFrame):
     def __init__(self) -> None:
         super().__init__(None)
@@ -885,6 +951,7 @@ class ToolbarWindow(QFrame):
         self.redo_button = IconButton("redo", "Redo")
         self.clear_button = IconButton("clear", "Clear")
         self.screenshot_button = IconButton("screenshot", "Screenshot")
+        self.about_button = IconButton("about", "About")
         self.quit_button = IconButton("quit", "Quit")
 
         self.color_button = IconButton("color", "Color")
@@ -894,6 +961,7 @@ class ToolbarWindow(QFrame):
         self.board_palette = BoardPalette()
         self.shape_palette = ShapePalette()
         self.tool_palette = ToolPalette()
+        self.about_palette = AboutPalette()
 
         for button in (
             self.pen_button,
@@ -939,6 +1007,7 @@ class ToolbarWindow(QFrame):
         layout.addWidget(self.clear_button, 0, Qt.AlignmentFlag.AlignHCenter)
         layout.addWidget(self.board_button, 0, Qt.AlignmentFlag.AlignHCenter)
         layout.addWidget(self.screenshot_button, 0, Qt.AlignmentFlag.AlignHCenter)
+        layout.addWidget(self.about_button, 0, Qt.AlignmentFlag.AlignHCenter)
         layout.addWidget(self.quit_button, 0, Qt.AlignmentFlag.AlignHCenter)
 
         self._collapsible_widgets = [
@@ -954,6 +1023,7 @@ class ToolbarWindow(QFrame):
         self.redo_button,
         self.clear_button,
         self.screenshot_button,
+        self.about_button,
         self.quit_button,
     ]
 
@@ -1004,6 +1074,7 @@ class ToolbarWindow(QFrame):
             self.redo_button,
             self.clear_button,
             self.screenshot_button,
+            self.about_button,
             self.quit_button,
         ):
             widget.installEventFilter(self)
@@ -1014,6 +1085,7 @@ class ToolbarWindow(QFrame):
         self.size_button.clicked.connect(self.toggle_size_palette)
         self.color_button.clicked.connect(self.toggle_color_palette)
         self.eye_button.clicked.connect(self.toggle_collapsed)
+        self.about_button.clicked.connect(self.toggle_about_palette)
 
     def set_active_color(self, color: QColor) -> None:
         for button in self.color_buttons:
@@ -1057,6 +1129,7 @@ class ToolbarWindow(QFrame):
         self.shape_palette.hide()
         self.tool_palette.hide()
         self.size_palette.hide()
+        self.about_palette.hide()
 
         if event.button() == Qt.MouseButton.LeftButton:
             target = self.childAt(event.position().toPoint())
@@ -1111,6 +1184,7 @@ class ToolbarWindow(QFrame):
             self.redo_button,
             self.clear_button,
             self.screenshot_button,
+            self.about_button,
             self.quit_button,
         }:
             if event.type() == event.Type.MouseButtonPress and event.button() == Qt.MouseButton.LeftButton:
@@ -1119,6 +1193,7 @@ class ToolbarWindow(QFrame):
                 self.shape_palette.hide()
                 self.tool_palette.hide()
                 self.size_palette.hide()
+                self.about_palette.hide()
 
                 self._drag_offset = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
                 self._drag_start_global = event.globalPosition().toPoint()
@@ -1157,6 +1232,7 @@ class ToolbarWindow(QFrame):
         self.shape_palette.hide()
         self.tool_palette.hide()
         self.size_palette.hide()
+        self.about_palette.hide()
 
         if self.board_palette.isVisible():
             self.board_palette.hide()
@@ -1225,6 +1301,7 @@ class ToolbarWindow(QFrame):
         self.board_palette.hide()
         self.shape_palette.hide()
         self.size_palette.hide()
+        self.about_palette.hide()
 
         if self.tool_palette.isVisible():
             self.tool_palette.hide()
@@ -1259,6 +1336,7 @@ class ToolbarWindow(QFrame):
         self.board_palette.hide()
         self.tool_palette.hide()
         self.size_palette.hide()
+        self.about_palette.hide()
 
         if self.shape_palette.isVisible():
             self.shape_palette.hide()
@@ -1299,6 +1377,7 @@ class ToolbarWindow(QFrame):
         self.shape_palette.hide()
         self.tool_palette.hide()
         self.size_palette.hide()
+        self.about_palette.hide()
 
         if self.color_palette.isVisible():
             self.color_palette.hide()
@@ -1334,6 +1413,7 @@ class ToolbarWindow(QFrame):
     def toggle_size_palette(self) -> None:
         if self.size_palette.isVisible():
             self.size_palette.hide()
+            self.about_palette.hide()
             return
 
         self.position_size_palette()
@@ -1391,6 +1471,25 @@ class ToolbarWindow(QFrame):
 
         if callable(self.on_moved):
             self.on_moved()
+
+    def toggle_about_palette(self) -> None:
+        self.color_palette.hide()
+        self.board_palette.hide()
+        self.shape_palette.hide()
+        self.tool_palette.hide()
+        self.size_palette.hide()
+
+        if self.about_palette.isVisible():
+            self.about_palette.hide()
+            return
+
+        self.position_about_palette()
+        self.about_palette.show()
+        self.about_palette.raise_()
+        self.about_palette.activateWindow()
+
+    def position_about_palette(self) -> None:
+        self.position_side_palette(self.about_button, self.about_palette)
 
 class OverlayWindow(QWidget):
     state_changed = Signal()
