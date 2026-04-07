@@ -870,7 +870,14 @@ class AboutPalette(QFrame):
         )
 
     def open_github(self) -> None:
-        QDesktopServices.openUrl(QUrl(APP_GITHUB_URL))
+        if sys.platform.startswith("win"):
+            import subprocess
+            subprocess.Popen(
+                ["cmd", "/c", "start", "", APP_GITHUB_URL],
+                shell=False,
+            )
+        else:
+            QDesktopServices.openUrl(QUrl(APP_GITHUB_URL))
         self.hide()
 
 class ToolbarWindow(QFrame):
@@ -1244,11 +1251,36 @@ class ToolbarWindow(QFrame):
         self.board_palette.activateWindow()
 
     def position_side_palette(self, button: QPushButton, palette: QWidget) -> None:
-        button_pos = button.mapToGlobal(button.rect().center())
         palette.adjustSize()
 
-        x = button_pos.x() + (button.width() // 2) + 10
-        y = button_pos.y() - (palette.height() // 2)
+        button_rect = button.rect()
+        button_center_global = button.mapToGlobal(button_rect.center())
+
+        screen = QGuiApplication.screenAt(button_center_global)
+        if screen is None:
+            screen = QGuiApplication.primaryScreen()
+
+        available = screen.availableGeometry()
+
+        gap = 10
+        palette_width = palette.width()
+        palette_height = palette.height()
+
+        x = button_center_global.x() + (button.width() // 2) + gap
+
+        if x + palette_width > available.right():
+            x = button_center_global.x() - (button.width() // 2) - gap - palette_width
+
+        y = button_center_global.y() - (palette_height // 2)
+
+        if y < available.top() + 4:
+            y = available.top() + 4
+
+        if y + palette_height > available.bottom() - 4:
+            y = available.bottom() - palette_height - 4
+
+        if x < available.left() + 4:
+            x = available.left() + 4
 
         palette.move(x, y)
 
@@ -1411,9 +1443,14 @@ class ToolbarWindow(QFrame):
         )
 
     def toggle_size_palette(self) -> None:
+        self.color_palette.hide()
+        self.board_palette.hide()
+        self.shape_palette.hide()
+        self.tool_palette.hide()
+        self.about_palette.hide()
+
         if self.size_palette.isVisible():
             self.size_palette.hide()
-            self.about_palette.hide()
             return
 
         self.position_size_palette()
